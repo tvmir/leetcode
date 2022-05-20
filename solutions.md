@@ -311,7 +311,7 @@ Given an integer array nums sorted in non-decreasing order, return an array of t
 
       else:
         res[i] = pow(nums[right], 2)
-        right += 1
+        right -= 1
 
     return res
 
@@ -440,4 +440,215 @@ Return the maximum amount of water a container can store.
 
 - Big-O:
   - Time Complexity: O(n)
+  - Space Complexity: O(1)
+
+---
+
+Given an integer array nums, **return all the triplets** [nums[i], nums[j], nums[k]] such that i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0.
+
+#### Example:
+
+- Input: nums = [-1,0,1,2,-1,-4]
+- Output: [[-1,-1,2],[-1,0,1]]
+
+#### Solution:
+
+- Breakdown:
+
+  1. Original: -1 . 0 . 1 . 2 . -1 . -4
+  2. **Sorted**: -4 . -1 . -1 . 0 . 1 . 2
+  3. -4 . -1 . -1 . 0 . 1 . 2
+
+     . i .... l ................. r <br>
+     curr_sum = -4 + -1 + 2 = -3 (< 0, increment left pointer)
+
+  4. -4 . -1 . -1 . 0 . 1 . 2
+
+     . i .......... l ........... r <br>
+     curr_sum = -4 + -1 + 2 = -3 (< 0, increment left pointer)
+
+  5. -4 . -1 . -1 . 0 . 1 . 2
+
+     . i ............... l ...... r <br>
+     curr_sum = -4 + 0 + 2 = -2 (< 0, increment left pointer)
+
+  6. -4 . -1 . -1 . 0 . 1 . 2
+
+     ........ i ... l ............ r (After calculating all sums for single index, we move on to the next one)<br>
+     curr_sum = -1 + -1 + 2 = 0 (== 0, increment left pointer and decrement right pointer, store it in a sub list)
+
+  7. -4 . -1 . -1 . 0 . 1 . 2
+
+     ........ i ........ l .. r (After calculating all sums for single index, we move on to the next one)<br>
+     curr_sum = -1 + 0 + 1 = 0 (== 0, increment left pointer and decrement right pointer, store it in a sub list)
+
+  8. -4 . -1 . -1 . 0 . 1 . 2
+
+     ................... i .. l .. r (If the current index is the same as the previous one, skip it)<br>
+     curr_sum = 0 + 1 + 2 = 3 (Reached the end of calculations, break)
+
+- Steps:
+
+  - Initalize a res list to store all sums
+  - Return an empty list if the list contains < than 3 elements
+  - **Sort** the list in ascending order
+  - Loop through the entire list, whilst the current index is equal to the previous index continue with the calculation
+  - Initialize the left pointer to be i + 1, and the right pointer to be the last element in the list
+  - Loop through the list while the left pointer is < than the right pointer
+  - Calculate the current sum by adding all 3 values (i, left, right)
+  - If the sum is == to 0 then append all the values to a sub list, then append it to res, increment the left pointer, decrement the right pointer
+  - Increment the left pointer if the current value is == to the prev value
+  - Decrement the right pointer if the current value is == to the prev value
+  - Increment the left pointer if the curr_sum is < than 0
+  - Otherwise decrement the right pointer
+  - Return the res list
+
+- Code:
+
+  ```python
+  def threeSum(nums):
+    N = len(nums)
+    res = []
+
+    # Base case
+    if N < 3:
+      return res
+
+    # Sort List
+    nums.sort()
+
+    # Iterate through the list
+    for i in range(N):
+      if i != 0 and nums[i] == nums[i - 1]:
+        continue
+
+      left, right = i + 1, N - 1
+
+      while left < right:
+        curr_sum = nums[i] + nums[left] + nums[right]
+
+        if curr_sum == 0:
+          sub_list = []
+          sub_list.append(nums[i])
+          sub_list.append(nums[left])
+          sub_list.append(nums[right])
+
+          # Adding all sub lists to the global res list
+          res.append(sub_list)
+
+          left += 1
+          right -= 1
+
+          while left < right and nums[left] == nums[left - 1]:
+            # Skip to the next element if the current is == to the prev value
+            left += 1
+
+          while left < right and nums[right] == nums[right + 1]:
+            right -= 1
+
+        elif curr_sum < 0:
+          left += 1
+
+        else:
+          right -= 1
+
+    return res
+
+  ```
+
+- Big-O:
+  - Time Complexity: O(n<sup>2</sup>)
+  - Space Complexity: O(n)
+
+---
+
+Given an integer array nums of length **n** and an integer **target**, find **three integers in nums** such that the **sum is closest to target**.
+
+Return the sum of the three integers.
+
+#### Example:
+
+- Input: nums = [-1,2,1,-4], target = 1
+- Output: 2
+
+#### Solution:
+
+- Breakdown:
+
+  1. Original: -1 . 2 . 1 . -4
+  2. **Sorted**: -4 . -1 . 1 . 2
+  3. **target**: 1
+  4. -4 . -1 . 1 . 2
+
+     . i .... l ...... r <br>
+     curr_sum: -4 + -1 + 2 = -3 <br>
+     curr_diff: -3 - 1 = |-4| = 4 (curr_sum - target)
+
+  5. -4 . -1 . 1 . 2
+
+     . i ......... l . r <br>
+     curr_sum: -4 + 1 + 2 = -1 <br>
+     curr_diff: -1 - 1 = |-2| = 2 <br>
+     diff: 2 < 4 (< than the curr_diff, so we update the diff) <br>
+     ans = -1 (new curr_sum)
+
+  6. -4 . -1 . 1 . 2
+
+     ........ i .. l . r <br>
+     curr_sum: -1 + 1 + 2 = 2 <br>
+     curr_diff: 2 - 1 = |1| = 1 <br>
+     diff: 1 < 2 (< than the curr_diff, so we update the diff) <br>
+     ans = 2 (Closest to the target)
+
+- Steps:
+
+  - Initialize 2 variables, one to hold the diff in closeness between the sum and the target, and the other to hold the final answer
+  - Sort the list
+  - Loop through the list, initialize the left pointer to be i + 1, and the right pointer to be N - 1
+  - Loop through the list while the left pointer is less than the right pointer
+  - Calculate the current sum between all 3 values (i, left, right)
+  - Calculate the difference between the current sum and the target, use absolute value to eliminate -ve numbers
+  - If the current diff is **less** than the previous diff, **update the diff to be the current diff** and the **ans to be the current sum**
+  - Return the current sum if it's == to the target
+  - Else if the current sum is < than the target, increment the left pointer
+  - Otherwise decrement the right pointer
+  - Return the closest ans to the target
+
+- Code:
+
+  ```python
+  def threeSumClosest(nums, target):
+    N = len(nums)
+    diff, ans = float('inf'), 0
+
+    # Sort list
+    nums.sort()
+
+    # Iterate through the list
+    for i in range(N):
+      left, right = i + 1, N - 1
+
+      while left < right:
+        curr_sum = nums[i] + nums[left] + nums[right]
+        curr_diff = abs(curr_sum - target)
+
+        if curr_diff < diff:
+          diff = curr_diff
+          ans = curr_sum
+
+        if curr_sum == target:
+          return curr_sum
+
+        elif curr_sum < target:
+          left += 1
+
+        else:
+          right -= 1
+
+    return ans
+
+  ```
+
+- Big-O:
+  - Time Complexity: O(n<sup>2</sup>)
   - Space Complexity: O(1)
