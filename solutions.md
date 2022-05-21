@@ -652,3 +652,93 @@ Return the sum of the three integers.
 - Big-O:
   - Time Complexity: O(n<sup>2</sup>)
   - Space Complexity: O(1)
+
+---
+
+You are given a string s. We want to **partition the string into as many parts as possible** so that **each letter appears in at most one part**.
+
+Return a list of integers representing the size of these parts.
+
+#### Example:
+
+- Input: s = "ababcbacadefegdehijhklij"
+- Output: [9,7,8]
+
+#### Solution:
+
+- Breakdown:
+
+  1. String: a . b . a . b . c . b . a . c . a . d . e . f . e . g . d . e . h . i . j . h .. k . l ... i .. j <br>
+     Index: .0 . 1 . 2 . 3 . 4 . 5 . 6 . 7 . 8 . 9 10 11 12 13 .14 15 16 17 18 19 20 21 22 23
+
+  2. Get the last index of each character via a **Hash Map** <br>
+
+  3. First partiton is "ababcbaca" <br>
+
+     a b a b c b a c a <br>
+     i <br>
+     l <br>
+     ...................... r <br>
+     size: (r - l) + 1 = (8-0) + 1 = 9 <br>
+     res = [9]
+
+  4. Second partiton is "defegde" <br>
+
+     d e f e g d e <br>
+     i <br>
+     l <br>
+     ................. r <br>
+     size: (r - l) + 1 = (15-9) + 1 = 7 <br>
+     res = [9, 7]
+
+  5. Third partiton is "hijhklij" <br>
+
+     h i j h k l i j <br>
+     i <br>
+     l <br>
+     ............... r <br>
+     size: (r - l) + 1 = (23-16) + 1 = 8 <br>
+     res = [9, 7, 8]
+
+- Steps:
+
+  - Initialize a hash map that holds all the last indices of each character
+  - Initialize a res list to store the sizes of each partition
+  - Loop through the string and assign the last index of the character to the current i<sup>th</sup> index
+  - Initialize both left and right pointers and assign them to 0
+  - Loop through the string
+  - Update the right pointer to be the max position of itself or the last index of the current character via the hash map
+  - If the right pointer is equal to the current index then calculate the size of that partition
+  - Append the size to the res list
+  - Increment the right pointer, then update the left pointer to be the new right pointer
+
+- Code:
+
+  ```python
+  def partitionLabels(s):
+    last_idx = {}
+    res = []
+
+    for i, ch in enumerate(s):
+      last_idx[ch] = i
+
+    left, right = 0, 0
+
+    for i, ch in enumerate(s):
+      right = max(right, last_idx[ch])
+
+      if right == i:
+        size = (right - left) + 1
+        res.append(size)
+
+        # Moving on to the next partition
+        right += 1
+        # i, left, and right will start at the same index of the new partition
+        left = right
+
+    return res
+  ```
+
+- Big-O:
+  - Time Complexity: O(n)
+  - Space Complexity: O(n)
