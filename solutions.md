@@ -742,3 +742,160 @@ Return a list of integers representing the size of these parts.
 - Big-O:
   - Time Complexity: O(n)
   - Space Complexity: O(n)
+
+---
+
+Given an array nums with n objects colored red, white, or blue, sort them in-place so that objects of the same color are adjacent, with the colors in the order red, white, and blue.
+
+We will use the integers 0, 1, and 2 to represent the color red, white, and blue, respectively.
+
+#### Example:
+
+- Input: nums = [2,0,1]
+- Output: [0,1,2]
+
+#### Solution:
+
+- Breakdown:
+
+  1. 2 . 0 . 1 <br>
+     i <br>
+     l ........ r
+
+  2. 1 . 0 . 2 <br>
+     i <br>
+     l .. r (l == 2, swap l and r, r - 1)
+
+  3. 1 . 0 . 2 <br>
+     i <br>
+     .... l <br>
+     .... r (l == 1, l + 1)
+
+  4. 0 . 1 . 2 <br>
+     .... i <br>
+     ......... l <br>
+     .... r (l == 0, swap i and l, i + 1 and l + 1)
+
+- Steps:
+
+  - Initialize 3 pointers, 2 at the 0<sup>th</sup> index and 1 at N - 1
+  - Loop through the list while the left pointer is <= to the right pointer
+  - If the value of the left value is == 2, **swap the left and right values**, then decrement the right pointer by one
+  - Otherwise if the value of the left pointer is == 1 then increment the left pointer by 1
+  - Else when the value of the pointer is == 0 then **swap the i and left values**, then increment both the left and i pointers
+
+- Code:
+
+  ```python
+  def sortColors(nums):
+    N = len(nums)
+    i, left, right = 0, 0, N - 1
+
+    while left <= right:
+      if nums[left] == 2:
+        nums[left], nums[right] = nums[right], nums[left]
+        right -= 1
+
+      elif nums[left] == 1:
+        left += 1
+
+      else:
+        nums[left], nums[i] = nums[i], nums[left]
+        i += 1
+        left += 1
+  ```
+
+- Big-O:
+  - Time Complexity: O(n)
+  - Space Complexity: O(1)
+
+---
+
+Given the head of a sorted linked list, delete all nodes that have duplicate numbers, leaving only distinct numbers from the original list. Return the linked list sorted as well.
+
+#### Example:
+
+- Input: head = [1,1,1,2,3]
+- Output: [2,3]
+
+#### Solution:
+
+- Breakdown:
+
+  1. .... 1 . 1 . 1 . 2 . 3 <br>
+     p . c
+
+  2. .... 1 . 1 . 1 . 2 . 3 <br>
+     p . c . c (c == c.next, assign c to be c.next and now p points to new c.next)
+
+  3. .... 1 . 1 . 1 . 2 . 3 <br>
+     p . ............. c (now p points to 2 and because c != c.next, we return the new list which is [2, 3])
+
+- Steps:
+
+  - Base case where if the head is empty we return the head itself
+  - Initialize a **dummy** pointer to contain the prev pointer, and a curr pointer pointing to the head
+  - Loop through the list while the curr pointer is not empty
+  - If curr.next is not empty and the current value is == to the curr.next value, loop again to check if there are multiple duplicates back to back
+  - Assign the current value to be curr.next, break out of the loop and now point the prev.next pointer to be the current curr.next
+  - Else assign the prev pointer to point to prev.next
+  - return the dummy list **.next** to get all the values of the new list
+
+- Code:
+
+  ```python
+  def deleteDuplicates(head):
+    if not head:
+      return head
+
+    dummy = ListNode(0, head)
+    curr, prev = head, dummy
+
+    while curr:
+      if curr.next and curr.val == curr.next.val:
+        while curr.next and curr.val == curr.next.val:
+          curr = curr.next
+
+        prev.next = curr.next
+
+      else:
+        prev = prev.next
+
+      curr = curr.next
+
+    return dummy.next
+  ```
+
+- Big-O:
+  - Time Complexity: O(n)
+  - Space Complexity: O(1)
+
+---
+
+Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it can trap after raining.
+
+#### Example:
+
+- Input: height = [4,2,0,3,2,5]
+- Output: 9
+
+#### Solution:
+
+- Breakdown:
+
+  1. .
+
+- Steps:
+
+  - Base
+
+- Code:
+
+  ```python
+  def trap(height):
+
+  ```
+
+- Big-O:
+  - Time Complexity: O(n)
+  - Space Complexity: O(1)
