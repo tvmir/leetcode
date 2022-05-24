@@ -899,3 +899,129 @@ Given n non-negative integers representing an elevation map where the width of e
 - Big-O:
   - Time Complexity: O(n)
   - Space Complexity: O(1)
+
+---
+
+## 2. Sliding Window
+
+Given an array of positive integers nums and a **positive integer** **target**, return the **minimal length of a contiguous subarray** [numsl, numsl+1, ..., numsr-1, numsr] of which the sum is greater than or equal to target. If there is no such subarray, return 0 instead.
+
+#### Example:
+
+- Input: nums = [2,3,1,2,4,3], target = 7
+- Output: 2
+
+#### Solution:
+
+- Breakdown:
+
+  1. 2 . 3 . 1 . 2 . 4 . 3 <br>
+     l <br>
+     .............. r (move r until it's >= target)<br>
+     curr_min: 4 (r - l) + 1 <br>
+     sum: 8 >= target
+
+  2. 2 . 3 . 1 . 2 . 4 . 3 <br>
+     ..... l (move l after getting a valid sum) <br>
+     .............. r <br>
+     curr_min: still 4 <br>
+     sum: still 8
+
+  3. 2 . 3 . 1 . 2 . 4 . 3 <br>
+     ..... l <br>
+     .................... r <br>
+     curr_min: 4 <br>
+     sum: 10 >= target (3+1+2+4)
+
+  4. 2 . 3 . 1 . 2 . 4 . 3 <br>
+     .......... l <br>
+     .................... r <br>
+     curr_min: 3 <br>
+     sum: 7 == target
+
+  5. 2 . 3 . 1 . 2 . 4 . 3 <br>
+     .............. l <br>
+     .................... r <br>
+     curr_min: still 3 <br>
+     sum: still 7
+
+  6. 2 . 3 . 1 . 2 . 4 . 3 <br>
+     .............. l <br>
+     ........................ r <br>
+     curr_min: 3 <br>
+     sum: 9
+
+  7. 2 . 3 . 1 . 2 . 4 . 3 <br>
+     ................... l <br>
+     ........................ r <br>
+     curr_min: 2 <br>
+     sum: 7 == target (after this r would be out of bounds, hence we break out of the loop)
+
+- Steps:
+
+  - Initialize both left and right pointers and assign them to 0
+  - Initialize a curr_min to be a max value, and the sum to be 0
+  - Iterate through the list while the right pointer is < than N
+  - Calculate the sum by adding it to nums[right] (see comment)
+  - While the sum is >= the target get the curent minimum length between the 2 pointers
+  - Remove the left pointer's value from the sum calculation because we'll be moving it by 1 afterwards
+  - Increment the right pointer whilst the sum is smaller than the target
+  - Return 0 if the we couldnt find the sum of the list to be >= to the target, otherwise if it does exists return the curr_min
+
+- Code:
+
+  ```python
+  def minSubArrayLen(nums, target):
+    N = len(nums)
+    left, right = 0, 0
+    curr_min, sum = float('inf'), 0
+
+    while right < N:
+      # Summing all values from left to right pointer inclusive
+      sum += nums[right]
+
+      while sum >= target:
+        curr_min = min(curr_min, (right - left) + 1)
+        sum -= nums[left]
+        left += 1
+
+      right += 1
+
+    return 0 if curr_min == float('inf') else curr_min
+  ```
+
+- Big-O:
+  - Time Complexity: O(n)
+  - Space Complexity: O(1)
+
+---
+
+Given a string s, find the length of the longest substring without repeating characters.
+
+#### Example:
+
+- Input: s = "abcabcbb"
+- Output: 3
+
+#### Solution:
+
+- Breakdown:
+
+  1. 2
+
+- Steps:
+
+  - In
+
+- Code:
+
+  ```python
+  def lengthOfLongestSubstring(s):
+
+  ```
+
+- Big-O:
+  - Time Complexity: O(n)
+  - Space Complexity: O(1)
+
+---
