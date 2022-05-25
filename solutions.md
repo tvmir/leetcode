@@ -1007,21 +1007,85 @@ Given a string s, find the length of the longest substring without repeating cha
 
 - Breakdown:
 
-  1. 2
+  1. p w w k e w r <br>
+     l <br>
+     r <br>
+     max_len = (r - l) + 1 <br>
+     set = {}
+
+  2. p w w k e w r <br>
+     l <br>
+     ... r <br>
+     max_len = 2 <br>
+     set = {p, w}
+
+  3. p w w k e w r <br>
+     l <br>
+     ....... r (while the letter is already in the set, move the left pointer)<br>
+     max_len = <br>
+     set = {}
+
+  4. p w w k e w r <br>
+     ....... l <br>
+     .......... r <br>
+     max_len = 2 <br>
+     set = {w, k}
+
+  5. p w w k e w r <br>
+     ....... l <br>
+     ............ r <br>
+     max_len = 3 <br>
+     set = {w, k, e}
+
+  6. p w w k e w r <br>
+     .......... l <br>
+     ................ r <br>
+     max_len = 3 <br>
+     set = {k, e, w}
+
+  7. p w w k e w r <br>
+     .......... l <br>
+     ................... r <br>
+     max_len = **4** <br>
+     set = {k, e, w, r}
 
 - Steps:
 
-  - In
+  - Base case where if N is empty then return N
+  - Initialize an empty set, a max_len and 2 pointers
+  - While the right pointer is < than N check while the letter at the right pointer is already in the set
+  - If it is remove the letter at the left pointer, otherwise add the letter of the right pointer and increment the left pointer
+  - Get the max length between the 2 pointer
+  - Increment the right pointer to move to the next letter
+  - Return the max length
 
 - Code:
 
   ```python
   def lengthOfLongestSubstring(s):
+    N = len(s)
+    set_s = set()
+    left, right = 0, 0
+    max_len = 0
 
+    # Base Case
+    if not N and N == 0:
+      return 0
+
+    while right < N:
+      while s[right] in set_s:
+        set_s.remove(s[left])
+        left += 1
+
+      set_s.add(s[right])
+      max_len = max(max_len, (right - left) + 1)
+      right += 1
+
+    return max_len
   ```
 
 - Big-O:
   - Time Complexity: O(n)
-  - Space Complexity: O(1)
+  - Space Complexity: O(n) or O(1)
 
 ---
