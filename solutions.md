@@ -1089,3 +1089,171 @@ Given a string s, find the length of the longest substring without repeating cha
   - Space Complexity: O(n) or O(1)
 
 ---
+
+Given a binary array nums and an integer k, return the **maximum number of consecutive 1's** in the array if you can **flip at most k 0's**.
+
+#### Example:
+
+- Input: nums = [1,1,1,0,0,0,1,1,1,1,0], k = 2
+- Output: 6
+
+#### Solution:
+
+- Breakdown:
+
+  1. 1 1 1 0 0 0 1 1 1 1 0 <br>
+     l <br>
+     ....... r (keep moving r until we reach a 0)<br>
+     count = 0 <br>
+     max_len = 0
+
+  2. 1 1 1 0 0 0 1 1 1 1 0 <br>
+     l <br>
+     ....... r <br>
+     count = 1 (we encountered a 0, so increment count) <br>
+     max_len = 4 (the length between l and r inclusive)
+
+  3. 1 1 1 0 0 0 1 1 1 1 0 <br>
+     l <br>
+     .......... r <br>
+     count = 2 (we encountered another 0, so increment count) <br>
+     max_len = 5
+
+  4. 1 1 1 0 0 0 1 1 1 1 0 <br>
+     .............. l <br>
+     .............. r <br>
+     count = 0 (we encountered another 0, but this time it's > than k, so we decrement the 0 count and move l) <br>
+     max_len = 0
+
+  5. 1 1 1 0 0 0 1 1 1 1 0 <br>
+     .............. l <br>
+     ........................... r <br>
+     count = 2 <br>
+     max_len = 6
+
+- Steps:
+
+  - Initialize two pointers starting at 0, a max_len and a count variable to keep track of the amount of 0s
+  - Loop through the list while right is < than N
+  - if the right pointer value contains a 0 then we increment the count, afterwards increment the right pointer
+  - Whilst count is > than k then we check if the value at the left pointer is 0, if it is then we decrement the count and increment the left pointer until count reaches 0
+  - Get the maximum length between left and right pointers inclusive
+  - Return the maximum length
+
+- Code:
+
+  ```python
+  def longestOnes(nums, k):
+    N = len(nums)
+    left, right = 0, 0
+    max_len = 0
+    count = 0
+
+    while right < N:
+      if nums[right] == 0:
+        count += 1
+
+      right += 1
+
+      while count > k:
+        if nums[left] == 0:
+          count -= 1
+
+        left += 1
+
+      max_len = max(max_len, right - left)
+
+    return max_len
+  ```
+
+- Big-O:
+  - Time Complexity: O(n)
+  - Space Complexity: O(1)
+
+---
+
+You are given a **string s and an integer k**. You can choose any character of the string and change it to any other uppercase English character. You can perform this operation at most k times.
+
+Return the **length of the longest substring containing the same letter** you can get after performing the above operations.
+
+#### Example:
+
+- Input: s = "AABABBA", k = 1
+- Output: 4
+
+#### Solution:
+
+- Breakdown:
+
+  1. A A B A B B A <br>
+     l <br>
+     r <br>
+     count = {A: 1} <br>
+     max_len = 1
+
+  2. A A B A B B A <br>
+     l <br>
+     ...... r <br>
+     count = {A: 2, B: 1} <br>
+     max_len = 3 (3-2 = 1 <= k) Get the length of the two pointers - the highest frequency letter in the map (A: 2 in this instance)
+
+  3. A A B A B B A <br>
+     l <br>
+     ......... r <br>
+     count = {A: 3, B: 1} <br>
+     max_len = 4 (4-3 = 1 <= k)
+
+  4. A A B A B B A <br>
+     l <br>
+     ............. r <br>
+     count = {A: 3, B: 2} <br>
+     max_len = 5 (5-3 = 2 >= k so move the left pointer)
+
+  5. A A B A B B A <br>
+     ...... l <br>
+     ............. r <br>
+     count = {A: 1, B: 2} <br>
+     max_len = 1 (3-2 = 1 >= k)
+
+  6. A A B A B B A <br>
+     ...... l <br>
+     ................ r <br>
+     count = {A: 1, B: 3} <br>
+     max_len = **4** (4-3 = 1 >= k)
+
+- Steps:
+
+  - Initialize two pointers, a max_len, and a count dictionary to store the letters and their frequencies
+  - Loop through the string while the right pointer is < than N
+  - Assign the characters to their current frequency
+  - Calculate the length between the two pointers, subtract is buy the highest frequency in the ,ap and check while it's greater than k
+  - Decrement (eliminate) the element at the left pointer that was already in the map and increment the left pointer
+  - Calculate the maximum length between the 2 pointers inclusive
+  - Increment the right pointer
+  - Return the maximun length
+
+- Code:
+
+  ```python
+  def characterReplacement(s, k):
+    N = len(s)
+    left, right = 0, 0
+    max_len = 0
+    count = {}
+
+    while right < N:
+      count[s[right]] = 1 + count.get(s[right], 0)
+
+      while (right - left + 1) - max(count.values()) > k:
+        count[s[left]] -= 1
+        left += 1
+
+      max_len = max(max_len, (right - left) + 1)
+      right += 1
+
+    return max_len
+  ```
+
+- Big-O:
+  - Time Complexity: O(n)
+  - Space Complexity: O(n) -> O(26) bec. it only contains uppercase characters
