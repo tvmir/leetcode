@@ -1257,3 +1257,151 @@ Return the **length of the longest substring containing the same letter** you ca
 - Big-O:
   - Time Complexity: O(n)
   - Space Complexity: O(n) -> O(26) bec. it only contains uppercase characters
+
+---
+
+## 3. Binary Search
+
+Given the sorted rotated array nums of **unique** elements, return the **minimum element** of this array.
+
+#### Example:
+
+- Input: nums = [3,4,5,1,2]
+- Output: 1
+
+#### Solution:
+
+- Breakdown:
+
+  1. Original Sorted: 1 2 3 4 5
+  2. Rotated: 3 4 5 1 2
+  3. 3 4 5 1 2
+  4. nums[mid] = 5 > nums[right] = 2
+  5. Remove everything before 5
+  6. **1** 2 (lowest is 1)
+
+- Steps:
+
+  - Typical binary search using 2 pointers
+  - Find the middle pointer in the list
+  - If the value at mid is > than the value at right then move left to be at mid + 1
+  - Otherwise move the right pointer to mid
+  - Return The first element of the founded sub list as it would be sorted, thus getting the minimum element
+
+- Code:
+
+  ```python
+  def findMin(nums):
+    N = len(nums)
+    left, right = 0, N - 1
+
+    while left < right:
+      mid = left + (right - left) // 2
+
+      if nums[mid] > nums[right]:
+        left = mid + 1
+
+      else:
+        right = mid
+
+    return nums[left]
+  ```
+
+- Big-O:
+  - Time Complexity: O(log n)
+  - Space Complexity: O(1)
+
+---
+
+Given the sorted rotated array nums that may **contain duplicates**, return the **minimum element** of this array.
+
+#### Example:
+
+- Input: nums = [2,2,2,0,1]
+- Output: 0
+
+#### Solution:
+
+- Steps:
+
+  - Same steps as the last question but instead introduce a check where if the value at mid is == to the value at right, then decrement the right pointer to ensure it's the right index if the value's duplicated
+
+- Code:
+
+  ```python
+  def findMin(nums):
+    N = len(nums)
+    left, right = 0, N - 1
+
+    while left < right:
+      mid = left + (right - left) // 2
+
+      if nums[mid] > nums[right]:
+        left = mid + 1
+
+      elif nums[mid] < nums[right]:
+        right = mid
+
+      else:
+        right -= 1
+
+    return nums[left]
+  ```
+
+- Big-O:
+  - Time Complexity: O(log n)
+  - Space Complexity: O(1)
+
+---
+
+Given a characters array letters that is sorted in non-decreasing order and a character target, return the **smallest character** in the array that is **larger than target**.
+
+#### Example:
+
+- Input: letters = ["c","f","j"], target = "c"
+- Output: "f"
+
+#### Solution:
+
+- Breakdown:
+
+  1. c . f . j
+  2. "f" is greater than the target "c" so we return "f"
+
+- Steps:
+
+  - Initialize left and right pointers
+  - Initialize a variable to hold the smallest character at the 0th index
+  - Loop through the list while left is <= right
+  - Get the mid pointer
+  - If the letter at the mid pointer is <= to the target, then assign left to be mid + 1
+  - Otherwise assign the smallest letter to be the letter at the mid point
+  - Assign right to be mid - 1
+  - Return the smallest letter in the list
+
+- Code:
+
+  ```python
+  def nextGreatestLetter(nums):
+    N = len(nums)
+    left, right = 0, N - 1
+    smallest = letters[0]
+
+    while left <= right:
+      mid = left + (right - left) // 2
+
+      if letters[mid] <= target:
+        left = mid + 1
+
+      else:
+        smallest = letters[mid]
+        right = mid - 1
+
+    return smallest
+  ```
+
+- Big-O:
+  - Time Complexity: O(log n)
+  - Space Complexity: O(1)
+
+---
