@@ -1405,3 +1405,152 @@ Given a characters array letters that is sorted in non-decreasing order and a ch
   - Space Complexity: O(1)
 
 ---
+
+A peak element is an element that is strictly greater than its neighbors.
+
+Given an integer array nums, **find a peak element, and return its index**. If the array contains multiple peaks, return the index to any of the peaks.
+
+#### Example:
+
+- Input: nums = [1,2,1,3,5,6,4]
+- Output: 5 **or** 1 (peaks from the left and right side of the middle index)
+
+#### Solution:
+
+- Breakdown:
+
+  1. 1 2 1 3 5 6 4 <br>
+     l ..... m <br>
+     ................. r <br>
+
+  2. 1 2 1 3 5 6 4 <br>
+     ....... m l <br>
+     ................. r <br>
+     (nums[mid] <= nums[mid+1], so left will be mid + 1, meaning we'll solely look at everything **after** the mid point)
+
+  3. Biggest value in this list is 6 which is at index 5, so we would return 5
+
+- Steps:
+
+  - Initialize left and right pointers
+  - Loop through the list while left is <= right
+  - Get the mid point
+  - Check if nums[mid] is <= nums[mid + 1], if it is then update the position of left to be mid + 1
+  - Otherwise assign the right pointer to be the mid point
+  - Return either the left or right pointers, dependent on which side of the list we'll be looking at
+
+- Code:
+
+  ```python
+  def findPeakElement(nums):
+    N = len(nums)
+    left, right = 0, N - 1
+
+    while left <= right:
+      mid = left + (right - left) // 2
+
+      if nums[mid] <= nums[mid + 1]:
+        left = mid + 1
+
+      else:
+        right = mid
+
+    return left or right
+  ```
+
+- Big-O:
+  - Time Complexity: O(log n)
+  - Space Complexity: O(1)
+
+---
+
+Given the array nums **after the possible rotation** and an integer target, **return the index of target if it is in nums**, or -1 if it is not in nums.
+
+#### Example:
+
+- Input: nums = [4,5,6,7,0,1,2], target = 0
+- Output: 4 (return the index of 0)
+
+#### Solution:
+
+- Steps:
+
+  - Initialize left and right pointers
+  - Loop through the list while left is <= right
+  - Get the mid point
+  - If the value at the mid point is == to the target then return mid directly
+  - Check if nums[mid] is >= nums[left]
+  - If it is then have another check and see if nums[mid] is < than the target **or** if nums[left] is > than the target
+  - If it satisfies the conditions above the move left to be mid + 1
+  - Otherwise move right to be mid - 1
+  - If nums[mid] is < than nums[left]
+  - Check if nums[mid] is > than the target **or** if nums[right] is < than the target
+  - If the conditions are met then move right to be mid - 1
+  - Otherwise assign left to be mid + 1
+  - Return -1 if we couldn't find the target
+
+- Code:
+
+  ```python
+  def search(nums, target):
+    N = len(nums)
+    left, right = 0, N - 1
+
+    while left <= right:
+      mid = left + (right - left) // 2
+
+      if nums[mid] == mid:
+        return mid
+
+      if nums[mid] >= nums[left]:
+        if nums[mid] < target or nums[left] > target:
+          left = mid + 1
+        else:
+          right = mid - 1
+
+      else:
+        if nums[mid] > target or nums[right] < target:
+          right = mid - 1
+        else:
+          left = mid + 1
+
+    return -1
+  ```
+
+- Big-O:
+  - Time Complexity: O(log n)
+  - Space Complexity: O(1)
+
+---
+
+Given an array of integers nums sorted in non-decreasing order, find the **starting** and **ending** position of a given target value.
+
+If target is not found in the array, return [-1, -1].
+
+#### Example:
+
+- Input: nums = [5,7,7,8,8,10], target = 8
+- Output: [3,4]
+
+#### Solution:
+
+- Breakdown:
+
+  1.
+
+- Steps:
+
+  -
+
+- Code:
+
+  ```python
+  def searchRange(nums, target):
+
+  ```
+
+- Big-O:
+  - Time Complexity: O(log n)
+  - Space Complexity: O(1)
+
+---
