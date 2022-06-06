@@ -1534,19 +1534,49 @@ If target is not found in the array, return [-1, -1].
 
 #### Solution:
 
-- Breakdown:
-
-  1.
-
 - Steps:
 
-  -
+  - Have a seperate function to perform binary search
+  - Initialize a left and right pointer, and a firstPos variable that holds N
+  - Loop through the list while left is <= than right
+  - Initialize the mid point
+  - If the value at the mid point is less than the target, move left to be mid + 1
+  - Otherwise assign the firstPos of the list to be the mid point, and the right to be mid - 1
+  - return the firstPos
+  - On the main function, initialize the first position element to be assigned to the search function assigned above, simply holds the nums[] and target
+  - The last position element would hold nums[], and the last target value (target + 1) - 1
+  - If the first element is <= the last element then return a new list holding both first and last indices [first, last]
+  - Otherwise return [-1, -1]
 
 - Code:
 
-  ```python
-  def searchRange(nums, target):
+  ```java
+  static int search(int[] nums, int target) {
+    int N = nums.length;
+    int left = 0, right = N - 1;
+    int firstPos = N;
 
+    while (left <= right) {
+      int mid = left + (right - left) / 2;
+
+      if (nums[mid] < target) {
+        left = mid + 1;
+      } else {
+        firstPos = mid;
+        right = mid - 1;
+      }
+    }
+    return firstPos;
+  }
+
+  public int[] searchRange(int[] nums, int target) {
+    int first = search(nums, target);
+    int last = search(nums, target + 1) - 1;
+
+    if (first <= last) return new int[] {first, last};
+
+    return new int[] {-1, -1};
+  }
   ```
 
 - Big-O:
@@ -1554,3 +1584,78 @@ If target is not found in the array, return [-1, -1].
   - Space Complexity: O(1)
 
 ---
+
+Given a sorted integer array arr, two integers k and x, return the **k closest integers to x in the array**. The result should also be sorted in ascending order.
+
+#### Example:
+
+- Input: arr = [1,2,3,4,5], k = 4, x = 3
+- Output: [1,2,3,4]
+
+#### Solution:
+
+- Breakdown:
+
+  - Pretty much take the "target" element x, and get the numbers closest to it on both sides (left and right). k resembles the amount of elements we have to have in the list. In the constraints if left closest element is equal to the right closest element, **always** take left first.
+
+- Code:
+
+  ```java
+  public List<Integer> findClosestElements(int[] arr, int k, int x) {
+    int N = arr.length;
+    int left = 0, right = N - k;
+    List<Integer> res = new LinkedList<>();
+
+    while (left < right) {
+      int mid = left + (right - left) / 2;
+
+      // Comparing the distances between left, x and right
+      // If the distance between left and x is LARGER than x and right
+      // Shift left to the right side, and vice versa
+      if (x - arr[mid] > arr[mid + k] - x) {
+        left = mid + 1;
+      } else {
+        right = mid;
+      }
+    }
+
+    // Add the elements closest to x to the new list
+    for (int i = left; i < left + k; ++i)
+      res.add(arr[i]);
+
+    return res;
+  }
+  ```
+
+- Big-O:
+  - Time Complexity: O(log (n - k))
+  - Space Complexity: O(k)
+
+---
+
+## 3. Fast & Slow Pointers
+
+Given the head of a linked list, determine if the linked list has a **cycle** in it.
+
+#### Example:
+
+- Input: head = [3,2,0,-4], pos = 1
+- Output: true (both pointers eventually connect as the 1st node)
+
+#### Solution:
+
+- Breakdown:
+
+  -
+
+- Code:
+
+  ```java
+  public boolean hasCycle(ListNode head) {
+
+  }
+  ```
+
+- Big-O:
+  - Time Complexity: O(n)
+  - Space Complexity: O(1)
