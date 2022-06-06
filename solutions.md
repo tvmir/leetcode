@@ -1633,7 +1633,7 @@ Given a sorted integer array arr, two integers k and x, return the **k closest i
 
 ---
 
-## 3. Fast & Slow Pointers
+## 4. Fast & Slow Pointers
 
 Given the head of a linked list, determine if the linked list has a **cycle** in it.
 
