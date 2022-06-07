@@ -1646,16 +1646,181 @@ Given the head of a linked list, determine if the linked list has a **cycle** in
 
 - Breakdown:
 
-  -
+  - Floyd's Tortoise and Hare Algorithm: The algorithm is split into 2 pointers, a slow and fast pointer. The fast pointer moves 2 spots wheras the slow pointer moves 1 spot. Because the fast pointer moves twice as fast there's a high possibility in one of its rounds that it is at the same spot as the slow pointer. If it is then we've found a cycle.
 
 - Code:
 
   ```java
   public boolean hasCycle(ListNode head) {
+    ListNode slow = head;
+    ListNode fast = head;
 
+    while (fast != null && fast.next != null) {
+      slow = slow.next;
+      fast = fast.next.next;
+
+      if (slow == fast) return true;
+    }
+    return false;
   }
   ```
 
 - Big-O:
   - Time Complexity: O(n)
   - Space Complexity: O(1)
+
+---
+
+Given the head of a linked list, **return the node** where the **cycle begins**. If there is no cycle, return **null**.
+
+#### Example:
+
+- Input: head = [3,2,0,-4], pos = 1
+- Output: index 1
+
+#### Solution:
+
+- Steps:
+
+  - Implementing the Floyd's Tortoise and Hare Algorithm
+  - Base case: check if head or head.next are null, if they are then return null
+  - Initialize a slow and fast pointer and assign them to head
+  - Loop through the list while fast and fast.next are not null
+  - Move slow pointer by 1
+  - Move fast pointer by 2
+  - If slow is == to fast then reset the slow pointer
+  - Have a loop to check whether slow is != fast
+  - Move the slow pointer by 1
+  - Move the fast pointer by 1
+  - Exit the loop and return slow
+  - Otherwise return null as we have not found a cycle
+
+- Code:
+
+  ```java
+  public ListNode detectCycle(ListNode head) {
+    if (head == null || head.next == null) return null
+    ListNode slow = head;
+    ListNode fast = head;
+
+    while (fast != null && fast.next != null) {
+      slow = slow.next;
+      fast = fast.next.next;
+
+      if (slow == fast) {
+        // Reset slow
+        slow = head;
+        while (slow != fast) {
+          slow = slow.next;
+          fast = fast.next;
+        }
+        return slow;
+      }
+    }
+    return null;
+  }
+  ```
+
+- Big-O:
+  - Time Complexity: O(n)
+  - Space Complexity: O(1)
+
+---
+
+Given the head of a singly linked list, return the **middle node** of the linked list.
+
+If there are **two middle nodes, return the second middle node.**
+
+#### Example:
+
+- Input: head = [3,2,0,-4], pos = 1
+- Output: index 1
+
+#### Solution:
+
+- Breakdown:
+
+  - Because the fast pointer moves twice as fast, every time it goes out of bounds the slow pointer automatically ends up in the middle, and if there are 2 middle nodes it'll always end up on the second one.
+
+- Code:
+
+  ```java
+  public ListNode middleNode(ListNode head) {
+    ListNode slow = head;
+    ListNode fast = head;
+
+    while (fast != null && fast.next != null) {
+      slow = slow.next;
+      fast = fast.next.next;
+    }
+    return slow;
+  }
+  ```
+
+- Big-O:
+  - Time Complexity: O(n)
+  - Space Complexity: O(1)
+
+---
+
+Given the head of a singly linked list, return true if it is a **palindrome**.
+
+#### Example:
+
+- Input: head = [1,2,2,1]
+- Output: true
+
+#### Solution:
+
+- Breakdown:
+
+  - **Reverse the second half** of the list and compare the elements, if they're equal then it's a palindrome.
+
+- Code:
+
+  ```java
+  public boolean isPalindrome(ListNode head) {
+    // Base case
+    if (head == null || head.next == null) return true;
+    ListNode slow = head;
+    ListNode fast = head;
+
+    while (fast != null && fast.next != null) {
+      slow = slow.next;
+      fast = fast.next.next;
+    }
+
+    ListNode left = head;
+    ListNode right = reverse(slow);
+
+    while (right != null) {
+      // Move both pointers to their next element until they're all equal
+      if (left.val == right.val) {
+        left = left.next;
+        right = right.next;
+      } else {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  private ListNode reverse(ListNode head) {
+    // Base case
+    if (head == null || head.next == null) return head;
+    ListNode prev = null, temp = null;
+
+    for (ListNode curr = head; curr != null; curr = temp) {
+      temp = curr.next;
+      curr.next = prev;
+      prev = curr;
+    }
+    return prev;
+  }
+  ```
+
+- Big-O:
+  - Time Complexity: O(n)
+  - Space Complexity: O(1)
+
+---
