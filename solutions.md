@@ -1837,7 +1837,7 @@ L0 → Ln → L1 → Ln - 1 → L2 → Ln - 2 → …
 
 - Breakdown:
 
-  - 1 2 3 4 5
+  - 1 2 3 4 5 <br>
     ..... s (Slow pointer ends up in the middle when the fast pointer is out of bounds)
   - Split the list into 2 halves
     - 1->2->null
@@ -1865,7 +1865,7 @@ L0 → Ln → L1 → Ln - 1 → L2 → Ln - 2 → …
       fast = fast.next.next;
     }
 
-    // Break list and assign it's tail be to null
+    // Break list and assign its tail to be null
     prev.next = null;
 
     // Assigning the head and tail of the second half
