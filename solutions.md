@@ -1808,14 +1808,122 @@ Given the head of a singly linked list, return true if it is a **palindrome**.
   private ListNode reverse(ListNode head) {
     // Base case
     if (head == null || head.next == null) return head;
-    ListNode prev = null, temp = null;
+    ListNode prev = null, next = null;
 
-    for (ListNode curr = head; curr != null; curr = temp) {
-      temp = curr.next;
+    for (ListNode curr = head; curr != null; curr = next) {
+      next = curr.next;
       curr.next = prev;
       prev = curr;
     }
     return prev;
+  }
+  ```
+
+- Big-O:
+  - Time Complexity: O(n)
+  - Space Complexity: O(1)
+
+---
+
+You are given the head of a singly linked-list. **Reorder the list** to be on the following form: <br>
+L0 → Ln → L1 → Ln - 1 → L2 → Ln - 2 → …
+
+#### Example:
+
+- Input: head = [1,2,3,4,5]
+- Output: [1,5,2,4,3]
+
+#### Solution:
+
+- Breakdown:
+
+  - 1 2 3 4 5
+    ..... s (Slow pointer ends up in the middle when the fast pointer is out of bounds)
+  - Split the list into 2 halves
+    - 1->2->null
+    - 3->4->5
+  - Break the list, assign its next to null, then reverse the second half
+    - 1->2->null
+    - 5->4->3->null
+  - Now point each node in the first half with its corresponding position in the second half
+  - Output: 1->5->2->4->3
+
+- Code:
+
+  ```java
+  public void reorderList(ListNode head) {
+    // Base case
+    if (head == null || head.next == null) return;
+    ListNode slow = head;
+    ListNode fast = head;
+    ListNode prev = null;
+
+    // Move the slow pointer to be the middle node
+    while (fast != null && fast.next != null) {
+      prev = slow;
+      slow = slow.next;
+      fast = fast.next.next;
+    }
+
+    // Break list and assign it's tail be to null
+    prev.next = null;
+
+    // Assigning the head and tail of the second half
+    ListNode left = head, right = reverse(slow);
+    while (left != null && right != null) {
+      // Have a reference to the next nodes of the new list
+      ListNode nextLeft = left.next;
+      ListNode nextRight = right.next;
+      // Assigning the node in the first half to point to the corresponding node in the second half
+      left.next = right;
+      right.next = nextLeft == null ? nextRight : nextLeft;
+      // Move to the next pointers and do the same operation till it's done
+      left = nextLeft;
+      right = nextRight;
+    }
+  }
+
+  private ListNode reverse(ListNode head) {
+    // Base case
+    if (head == null || head.next == null) return head;
+    ListNode prev = null, next = null;
+    ListNode curr = head;
+
+    for (; curr != null; curr = next) {
+      next = curr.next;
+      curr.next = prev;
+      prev = curr;
+    }
+    return prev;
+  }
+  ```
+
+- Big-O:
+  - Time Complexity: O(n)
+  - Space Complexity: O(1)
+
+---
+
+## 5. Linked List
+
+You are given two non-empty linked lists representing two non-negative integers. **The digits are stored in reverse order**, and each of their nodes contains a single digit. **Add the two numbers and return the sum** as a linked list.
+
+#### Example:
+
+- Input: l1 = [2,4,3], l2 = [5,6,4]
+- Output: [7,0,8] (342 + 465 = 807)
+
+#### Solution:
+
+- Breakdown:
+
+  - .
+
+- Code:
+
+  ```java
+  public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+
   }
   ```
 
