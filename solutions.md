@@ -1915,20 +1915,127 @@ You are given two non-empty linked lists representing two non-negative integers.
 
 #### Solution:
 
-- Breakdown:
+- Steps:
 
-  - .
+  - Initialize a dummy node to hold the previous node in the list
+  - Initialize a carry over variable for all numbers added that are >= 10
+  - Loop through the lists while they're not null, or the carry over is not 0
+  - Get the values of both lists
+  - Calculate the sum using those 2 values as well as whatever carry over element there is
+  - Afterwards calculate the carry over by dividing the sum by 10
+  - Then assign another node to be the current node, holing the sum % 10
+  - Based off that we found a carry over elemenet, so we assign the prev.next to be the current node
+  - Now update the pointers by assigning prev to curr
+  - and move the pointers of both lists to the next element to calcuate them
+  - Return dummy.next to get all the elements we've found
 
 - Code:
 
   ```java
   public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+    ListNode dummy = new ListNode();
+    ListNode prev = dummy;
+    int carry = 0;
 
+    while (l1 != null || l2 != null || carry != 0) {
+      int val1 = l1 != null ? l1.val : 0;
+      int val2 = l2 != null ? l2.val : 0;
+      int sum = val1 + val2 + carry;
+
+      // Find the carry overs
+      carry = sum / 10;
+      ListNode curr = new ListNode(sum % 10);
+      prev.next = curr;
+
+      // Update pointers
+      prev = curr;
+      l1 = l1 != null ? l1.next : null;
+      l2 = l2 != null ? l2.next : null;
+    }
+    return dummy.next;
   }
   ```
 
 - Big-O:
   - Time Complexity: O(n)
+  - Space Complexity: O(1)
+
+---
+
+Given the head of a singly linked list, **group all the nodes with odd indices together followed by the nodes with even indices**, and return the reordered list.
+
+The first node is considered odd, and the second node is even, and so on.
+
+#### Example:
+
+- Input: head = [2,1,3,5,6,4,7]
+- Output: [2,3,6,7,1,5,4] (odd indices first, then even)
+
+#### Solution:
+
+- Breakdown:
+
+  - We'll have 3 nodes, 1 holds the odd indices which would be head, the other would hold even indices which would start at head.next, and a third to get the head of the even portion of the list. With that we'll move through the list and group them by getting their next.next index, after looping through it we'll get the odd.next (which is even) and assign it to evenHead and return the head
+
+- Code:
+
+  ```java
+  public ListNode oddEvenList(ListNode head) {
+    if (head == null || head.next == null) return head;
+    ListNode odd = head;
+    ListNode even = head.next;
+    ListNode evenHead = even;
+
+    while (even != null && even.next != null) {
+      odd.next = odd.next.next;
+      even.next = even.next.next;
+
+      odd = odd.next;
+      even = even.next;
+    }
+    odd.next = evenHead;
+    return head;
+  }
+  ```
+
+- Big-O:
+  - Time Complexity: O(n)
+  - Space Complexity: O(1)
+
+---
+
+Given the heads of two singly linked-lists headA and headB, return **the node at which the two lists intersect**. If the two linked lists have no intersection at all, return null.
+
+#### Example:
+
+- Input: headA = [1,9,1,2,4], headB = [3,2,4]
+- Output: 2
+
+#### Solution:
+
+- Breakdown:
+
+  - So we can remove the added complexity of calculating both lengths and finding the intersections that way, we could instead wait until the lists reach the end (null) and assign them to the head of the other list, this way we can iterate however many times needed until we find an intersection, if we don't then return null
+
+- Code:
+
+  ```java
+  public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+    if (headA == null || headB == null) return null;
+    ListNode l1 = headA;
+    ListNode l2 = headB;
+
+    while (l1 != l2) {
+      l1 = l1 != null ? l1.next : headB;
+      l2 = l2 != null ? l2.next : headA;
+    }
+    // We could return either l1 or l2
+    return l1;
+  }
+  ```
+
+- Big-O:
+  - Time Complexity: O(n + m)
   - Space Complexity: O(1)
 
 ---
