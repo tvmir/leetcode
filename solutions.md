@@ -2039,3 +2039,52 @@ Given the heads of two singly linked-lists headA and headB, return **the node at
   - Space Complexity: O(1)
 
 ---
+
+You are given a **doubly linked list**, which contains nodes that have a next pointer, a previous pointer, and an additional child pointer. Given the head of the first level of the list, **flatten the list so that all the nodes appear in a single-level, doubly linked list**. Return the head of the flattened list. The nodes in the list must have all of their child pointers set to null.
+
+#### Example:
+
+- Input: head = [1,2,null,3]
+- Output: [1,3,2]
+
+#### Solution:
+
+- Breakdown:
+
+  - <img src="https://assets.leetcode.com/uploads/2021/11/09/flatten2.1jpg" width="200px">
+
+  - We'll always store 2 values in the **stack** if they're not null, the **next** node and the **child** node. Because we're trying to flatten the list the **child** node comes first, so we pop it out of the stack and make it the new next pointer, we'll do this for all levels until we have no child nodes, after we're done with the child nodes we'll add the rest of the original **next** nodes
+
+- Code:
+
+  ```java
+  public Node flatten(Node head) {
+    if (head == null) return head;
+    Node dummy = new Node();
+    Node prev = dummy;
+
+    Stack<Node> stack = new Stack<>();
+    stack.push(head);
+
+    while (!stack.isEmpty()) {
+      Node curr = stack.pop();
+
+      if (curr.next != null) stack.push(curr.next);
+      if (curr.child != null) stack.push(curr.child);
+
+      // Resetting and updating pointers
+      prev.next = curr;
+      curr.prev = prev;
+      curr.child = null;
+      prev = curr;
+    }
+    dummy.next.prev = null;
+    return dummy.next;
+  }
+  ```
+
+- Big-O:
+  - Time Complexity: O(n)
+  - Space Complexity: O(n)
+
+---
