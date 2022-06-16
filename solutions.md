@@ -2088,3 +2088,58 @@ You are given a **doubly linked list**, which contains nodes that have a next po
   - Space Complexity: O(n)
 
 ---
+
+Given the head of a linked list and a value x, **partition it** such that all nodes less than x come before nodes greater than or equal to x.
+
+You should p**reserve the original relative order of the nodes** in each of the two partitions.
+
+#### Example:
+
+- Input: head = [1,4,3,2,5,2], x = 3
+- Output: [1,2,2,4,3,5]
+
+#### Solution:
+
+- Breakdown:
+
+  - Have 2 lists, one that contains the values that are **<** than x, and the other has values that are **>=** x. Pretty much we'll go one node at a time and compare it to x, then add it to its respective list. Afterwards we'll merge both lists and at the end assign the **high** list to contain **null** at its last pointed node.
+  - low: 1->2->2
+  - high: 4->3->5->null
+  - Ans: 1->2->2->4->3->5
+
+- Code:
+
+  ```java
+  public ListNode partition(ListNode head, int x) {
+    // Base case
+    if (head == null) return head;
+
+    // Assigning the new sub lists
+    ListNode p1 = new ListNode(), p2 = new ListNode();
+    ListNode low = p1, high = p2;
+
+    ListNode curr = head;
+
+    while (curr != null) {
+      if (curr.val < x) {
+        low.next = curr;
+        low = curr;
+      } else {
+        high.next = curr;
+        high = curr;
+      }
+      curr = curr.next;
+    }
+    // Merge lists
+    low.next = p2.next;
+    high.next = null;
+
+    return p1.next;
+  }
+  ```
+
+- Big-O:
+  - Time Complexity: O(n)
+  - Space Complexity: O(1)
+
+---
