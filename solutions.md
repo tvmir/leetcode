@@ -2143,3 +2143,108 @@ You should p**reserve the original relative order of the nodes** in each of the 
   - Space Complexity: O(1)
 
 ---
+
+Given the head of a linked list, return the list after **sorting it** in ascending order.
+
+#### Example:
+
+- Input: head = [4,2,1,3]
+- Output: [1,2,3,4]
+
+#### Solution:
+
+- Breakdown:
+
+  - Apply the **Merge Sort Algorithm** by splitting the list in half, sort each half then merge both lists.
+
+- Code:
+
+  ```java
+  public ListNode sortList(ListNode head) {
+    if (head == null || head.next == null) return head;
+    // Splitting the list in half
+    ListNode left = head;
+    ListNode right = getMidNode(head);
+
+    // After getting the middle node, we need to make sure the first node in the second half is right.next
+    ListNode curr = right.next;
+    right.next = null;
+    right = curr;
+
+    // Sort both lists
+    left = sortList(left);
+    right = sortList(right);
+
+    // Merge both lists
+    return merge(left, right);
+  }
+
+  private ListNode getMidNode(ListNode head) {
+    ListNode slow = head;
+    ListNode fast = head.next;
+
+    while (fast != null && fast.next != null) {
+      slow = slow.next;
+      fast = fast.next.next;
+    }
+    return slow;
+  }
+
+  private ListNode merge(ListNode left, ListNode right) {
+    ListNode dummy = new ListNode();
+    ListNode curr = dummy;
+
+    while (left != null && right != null) {
+      // If the value of left is less, then point the new list.next to be the left node, then move to the next node. Same with right.
+      if (left.val < right.val) {
+        curr.next = left;
+        left = left.next;
+      } else {
+        curr.next = right;
+        right = right.next;
+      }
+      curr = curr.next;
+    }
+
+    // Combine the elements to the list
+    if (left != null) curr.next = left;
+    if (right != null) curr.next = right;
+
+    return dummy.next;
+  }
+  ```
+
+- Big-O:
+  - Time Complexity: O(n logn)
+  - Space Complexity: O(logn)
+
+---
+
+You are given an array of k linked-lists lists, each linked-list is **sorted in ascending order**.
+
+**Merge all the linked-lists** into one sorted linked-list and return it.
+
+#### Example:
+
+- Input: lists = [[1,4,5],[1,3,4],[2,6]]
+- Output: [1,1,2,3,4,4,5,6]
+
+#### Solution:
+
+- Breakdown:
+
+  - A
+
+- Code:
+
+  ```java
+  public ListNode mergeKLists(ListNode[] lists) {
+
+  }
+  ```
+
+- Big-O:
+  - Time Complexity: O(n logk)
+  - Space Complexity: O(1)
+
+---
