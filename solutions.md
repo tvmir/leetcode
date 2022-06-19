@@ -2233,18 +2233,111 @@ You are given an array of k linked-lists lists, each linked-list is **sorted in 
 
 - Breakdown:
 
-  - A
+  - 1->4->5, <br>
+    1->3->4, <br>
+    2->6
+  - Take the first element from all 3 lists
+  - Min Heap: 1 1 2 (All 3 are pointing to different nodes, so we **pop** the one at the top (first/lowest node) and add whichever node it's pointing at
+  - curr: 1
+  - Min Heap: 1 2 4 (Always in ascending order)
+  - curr: 1->1
+  - Min Heap: 2 3 4
+  - curr: 1->1->2
+  - Min Heap: 3 4 6
+  - curr: 1->1->2->3
+  - We keep doing it until we add all the nodes, The min heap has to **ALWAYS** have the lowest node at the **top**
 
 - Code:
 
   ```java
   public ListNode mergeKLists(ListNode[] lists) {
+    PriorityQueue<ListNode> minHeap = new PriorityQueue<>((a, b) -> a.val - b.val);
 
+    // Adding the nodes to the heap
+    for (ListNode node : lists) {
+      if (node != null) minHeap.add(node);
+    }
+
+    ListNode dummy = new ListNode();
+    ListNode curr = dummy;
+
+    while (!minHeap.isEmpty()) {
+      // Popping out the top element in the heap bec. it's the lowest
+      ListNode top = minHeap.poll();
+      // Assigning the node thats been popped as the next node pointed from curr
+      curr.next = top;
+      curr = curr.next;
+
+      // Adding the next pointed node from top to the heap
+      if (top.next != null) minHeap.add(top.next);
+    }
+    return dummy.next;
   }
   ```
 
 - Big-O:
   - Time Complexity: O(n logk)
+  - Space Complexity: O(n)
+
+---
+
+Given the head of a singly linked list, **reverse the list**, and return the reversed list.
+
+#### Example:
+
+- Input: head = [1,2,3,4,5]
+- Output: [5,4,3,2,1]
+
+#### Solution:
+
+- Code:
+
+  ```java
+  public ListNode reverseList(ListNode head) {
+    if (head == null) return head;
+
+    ListNode curr = head;
+    ListNode prev = null;
+    ListNode next = null;
+
+    for (; curr != null; curr = next) {
+      next = curr.next;
+      curr.next = prev;
+      prev = curr;
+    }
+    return prev;
+  }
+  ```
+
+- Big-O:
+  - Time Complexity: O(n)
+  - Space Complexity: O(1)
+
+---
+
+Given the head of a singly linked list and two integers left and right where left <= right, **reverse the nodes of the list from position left to position right**, and return the reversed list.
+
+#### Example:
+
+- Input: head = [1,2,3,4,5], left = 2, right = 4
+- Output: [1,4,3,2,5]
+
+#### Solution:
+
+- Breakdown:
+
+  - 1->
+
+- Code:
+
+  ```java
+  public ListNode reverseBetween(ListNode head, int left, int right) {
+
+  }
+  ```
+
+- Big-O:
+  - Time Complexity: O(n)
   - Space Complexity: O(1)
 
 ---
