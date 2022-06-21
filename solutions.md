@@ -2315,12 +2315,71 @@ Given the head of a singly linked list, **reverse the list**, and return the rev
 
 ---
 
-Given the head of a singly linked list and two integers left and right where left <= right, **reverse the nodes of the list from position left to position right**, and return the reversed list.
+Given the head of a linked list, **rotate the list** to the right by k places.
 
 #### Example:
 
-- Input: head = [1,2,3,4,5], left = 2, right = 4
-- Output: [1,4,3,2,5]
+- Input: head = [1,2,3,4,5], k = 2
+- Output: [4,5,1,2,3]
+
+#### Solution:
+
+- Breakdown:
+
+  - 1->2->3->4->5
+  - 5->1->2->3->4, 1st rotation
+  - 4->5->1->2->3, 2nd rotation
+  - To get this, we make it a **circular linked list** and connect the tail node to the head node. Then we calculate the numbers of rotations that needs to be made (k % size). Lastly we calculate the location of the new head, loop through it, and connect the tail to the head again until we exhaust k (k being the number of times we need rotate).
+
+- Code:
+
+  ```java
+  public ListNode rotateRight(ListNode head, int k) {
+    if (head == null || head.next == null) return head;
+
+    // Make it a Circular Linked List
+    ListNode prev = null;
+    ListNode curr = head;
+    int size = 0;
+
+    // Loop through all the nodes to get the list's size
+    while (curr != null) {
+      prev = curr;
+      curr = curr.next;
+      size++;
+    }
+    // Connect the nodes
+    curr = head;
+    prev.next = curr;
+
+    // Calculate the # of rotations
+    int rotation = k % size;
+
+    // Get the location of the new head
+    int location = size - rotation;
+
+    for (int i = 0; i < location; ++i) {
+      prev = curr;
+      curr = curr.next;
+    }
+    prev.next = null;
+
+    return curr;
+  }
+  ```
+
+- Big-O:
+  - Time Complexity: O(n)
+  - Space Complexity: O(1)
+
+---
+
+Given a linked list, **swap every two adjacent nodes and return its head**. You must solve the problem without modifying the values in the list's nodes (i.e., only nodes themselves may be changed.)
+
+#### Example:
+
+- Input: head = [1,2,3,4]
+- Output: [2,1,4,3]
 
 #### Solution:
 
@@ -2331,7 +2390,7 @@ Given the head of a singly linked list and two integers left and right where lef
 - Code:
 
   ```java
-  public ListNode reverseBetween(ListNode head, int left, int right) {
+  public ListNode swapPairs(ListNode head) {
 
   }
   ```
