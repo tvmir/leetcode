@@ -2385,13 +2385,31 @@ Given a linked list, **swap every two adjacent nodes and return its head**. You 
 
 - Breakdown:
 
-  - 1->
+  - We initialize a dummy node and assign it as a prev node to keep track of whichever pointer it's connected to, a current and dummy.next node that is pointed as the head of the list. With that we can initialize a new **next** pointer, assign it to curr.next, and then we can reverse all 3 nodes thats are dealt with each pair whilst simultaneously keeping track of the pointers and assigning them correctly after swapping the pairs.
 
 - Code:
 
   ```java
   public ListNode swapPairs(ListNode head) {
+    if (head == null || head.next == null) return head;
 
+    ListNode dummy = new ListNode(), prev = dummy;
+    ListNode curr = head;
+    dummy.next = head;
+
+    while (curr != null && curr.next != null) {
+      // Swapping the pairs and connecting them to the proper pointers
+      ListNode next = curr.next;
+      curr.next = next.next;
+      next.next = prev.next;
+      prev.next = next;
+
+      // Moving on to the next pair
+      prev = curr;
+      curr = curr.next;
+    }
+
+    return dummy.next;
   }
   ```
 
@@ -2400,3 +2418,5 @@ Given a linked list, **swap every two adjacent nodes and return its head**. You 
   - Space Complexity: O(1)
 
 ---
+
+## 6. Binary Tree
