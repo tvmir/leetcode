@@ -2420,3 +2420,173 @@ Given a linked list, **swap every two adjacent nodes and return its head**. You 
 ---
 
 ## 6. Binary Tree
+
+Given the root of a binary tree, return the **preorder traversal** of its nodes' values.
+
+#### Example:
+
+- Input: root = [1,null,2,3]
+- Output: [1,2,3]
+
+#### Solution:
+
+- Breakdown:
+
+  - PreOrder Traversal: Root->Left->Right
+  - In the iterative approach, we add the right node first, followed by the left node, then the root. Because the Stack follows the LIFO approach, we'll always pop the top element in the stack and add it to the list, this way we exhaust the root and left nodes first, and the right node last.
+
+- Code:
+
+  ```java
+  private List<Integer> res = new ArrayList<>();
+
+  public List<Integer> preorderTraversal(TreeNode root) {
+    // Recursive Approach
+    helper(root);
+    return res;
+
+    // Iterative Approach
+    if (root == null) return res;
+    Stack<TreeNode> stack = new Stack<>();
+
+    // Add the head node to the stack
+    stack.push(root);
+
+    while (!stack.isEmpty()) {
+      TreeNode top = stack.pop();
+
+      // Adding the element thats been popped from the stack into the list
+      res.add(top.val);
+
+      if (top.right != null) stack.push(top.right);
+      if (top.left != null) stack.push(top.left);
+    }
+    return res;
+  }
+
+  private void helper(TreeNode root) {
+    if (root == null) return;
+
+    res.add(root.val);
+    helper(root.left);
+    helper(root.right);
+  }
+  ```
+
+- Big-O:
+  - Time Complexity: O(n)
+  - Space Complexity: O(n)
+
+---
+
+Given the root of a binary tree, return the **inorder traversal** of its nodes' values.
+
+#### Example:
+
+- Input: root = [1,null,2,3]
+- Output: [1,3,2]
+
+#### Solution:
+
+- Breakdown:
+
+  - InOrder Traversal: Left->Root->Right
+
+- Code:
+
+  ```java
+  private List<Integer> res = new ArrayList<>();
+
+  public List<Integer> inorderTraversal(TreeNode root) {
+    // Recursive Approach
+    helper(root);
+    return res;
+
+    // Iterative Approach
+    if (root == null) return res;
+    Stack<TreeNode> stack = new Stack<>();
+    TreeNode curr = root;
+
+    while (!stack.isEmpty() || curr != null) {
+      while (curr != null) {
+        stack.push(curr);
+        curr = curr.left;
+      }
+      curr = stack.pop();
+      res.add(curr.val);
+      curr = curr.right;
+    }
+    return res;
+  }
+
+  private void helper(TreeNode root) {
+    if (root == null) return;
+
+    helper(root.left);
+    res.add(root.val);
+    helper(root.right);
+  }
+  ```
+
+- Big-O:
+  - Time Complexity: O(n)
+  - Space Complexity: O(n)
+
+---
+
+Given the root of a binary tree, return the **postorder traversal** of its nodes' values.
+
+#### Example:
+
+- Input: root = [1,null,2,3]
+- Output: [3,2,1]
+
+#### Solution:
+
+- Breakdown:
+
+  - PostOrder Traversal: Left->Right->Root
+  - Doing a reverse PreOrder traversal by adding each popped element to the **start** of the list using a LinkedList
+
+- Code:
+
+  ```java
+  private LinkedList<Integer> res = new LinkedList<>();
+
+  public List<Integer> postorderTraversal(TreeNode root) {
+    // Recursive Approach
+    helper(root);
+    return res;
+
+    // Iterative Approach
+    if (root == null) return res;
+    Stack<TreeNode> stack = new Stack<>();
+
+    stack.push(root);
+
+    while (!stack.isEmpty()) {
+      TreeNode top = stack.pop();
+
+      // Adding the popped element to the start of the list
+      res.addFirst(top.val);
+
+      if (top.left != null) stack.push(top.left);
+      if (top.right != null) stack.push(top.right);
+    }
+    return res;
+  }
+
+  private void helper(TreeNode root) {
+    if (root == null) return;
+
+    helper(root.left);
+    helper(root.right);
+    res.add(root.val);
+  }
+  ```
+
+- Big-O:
+  - Time Complexity: O(n)
+  - Space Complexity: O(n)
+
+---
