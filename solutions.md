@@ -2590,3 +2590,159 @@ Given the root of a binary tree, return the **postorder traversal** of its nodes
   - Space Complexity: O(n)
 
 ---
+
+Given the root of a binary tree, return the **level order traversal** of its nodes' values. (i.e., from left to right, level by level).
+
+#### Example:
+
+- Input: root = [3,9,20,null,null,15,7]
+- Output: [[3],[9,20],[15,7]]
+
+#### Solution:
+
+- Breakdown:
+
+  - <img src="https://assets.leetcode.com/uploads/2021/02/19/tree1.jpg">
+
+  - Apply BFS. Each level represents a sublist that contains all the nodes for that specific level, after getting all the sublists add them to the 2D res list.
+
+- Code:
+
+  ```java
+  public List<List<Integer>> levelOrder(TreeNode root) {
+    List<List<Integer>> res = new ArrayList<>();
+    if (root == null) return res;
+
+    Queue<TreeNode> queue = new LinkedList<>();
+    queue.add(root);
+
+    while (!queue.isEmpty()) {
+      int N = queue.size();
+      List<Integer> sublist = new ArrayList<>();
+
+      for (int i = 0; i < N; ++i) {
+        TreeNode curr = queue.poll();
+        sublist.add(curr.val);
+
+        if (curr.left != null) queue.add(curr.left);
+        if (curr.right != null) queue.add(curr.right);
+      }
+      res.add(sublist);
+    }
+    return res;
+  }
+  ```
+
+- Big-O:
+  - Time Complexity: O(n)
+  - Space Complexity: O(n)
+
+---
+
+Given the root of a binary tree, return the **zigzag level order traversal** of its nodes' values. (i.e., from left to right, then right to left for the next level and alternate between).
+
+#### Example:
+
+- Input: root = [3,9,20,null,null,15,7]
+- Output: [[3],[9,20],[15,7]]
+
+#### Solution:
+
+- Breakdown:
+
+  - <img src="https://assets.leetcode.com/uploads/2021/02/19/tree1.jpg">
+
+  - Apply BFS. Assign a boolean that checks whether the current level we're at is supposed to be from **left to right**, if it is then store it in a sublist and move on to the next level, now the next level has to be from **right to left**, we store it in that order in a sublist then add all the sublists back to res.
+
+- Code:
+
+  ```java
+  public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+    List<List<Integer>> res = new ArrayList<>();
+    if (root == null) return res;
+    Queue<TreeNode> queue = new LinkedList<>();
+    queue.add(root);
+
+    boolean isLeftToRight = true;
+
+    while (!queue.isEmpty()) {
+      int N = queue.size();
+      List<Integer> sublist = new ArrayList<>();
+
+      for (int i = 0; i < N; ++i) {
+        TreeNode curr  = queue.poll();
+
+        if (isLeftToRight) {
+          sublist.add(curr.val);
+        } else {
+          sublist.add(0, curr.val);
+        }
+
+        if (curr.left != null) queue.add(curr.left);
+        if (curr.right != null) queue.add(curr.right);
+      }
+      // Making it from right to left on the next level
+      isLeftToRight = !isLeftToRight;
+      res.add(sublist);
+    }
+    return res;
+  }
+  ```
+
+- Big-O:
+  - Time Complexity: O(n)
+  - Space Complexity: O(n)
+
+---
+
+You are given a perfect binary tree where all leaves are on the same level, and every parent has two children.
+
+Populate each **next pointer to point to its next right node**. If there is no next right node, the next pointer should be set to NULL.
+
+#### Example:
+
+- Input: root = [1,2,3,4,5,6,7]
+- Output: [1,#,2,3,#,4,5,6,7,#] (# = NULL)
+
+#### Solution:
+
+- Breakdown:
+  <img src="https://assets.leetcode.com/uploads/2019/02/14/116_sample.png">
+
+  - Apply BFS. Keeping track of the prev pointer for each node in each level, when we exhaust all the nodes in the level and reach the far right we then populate its next (#), we do this continuously until we have no more levels left.
+
+- Code:
+
+  ```java
+  public Node connect(Node root) {
+    if (root == null) return root;
+    Queue<Node> queue = new LinkedList<>();
+    queue.add(root);
+
+    while (!queue.isEmpty()) {
+      int N = queue.size();
+      Node prev = null;
+
+      for (int i = 0; i < N; ++i) {
+        Node curr = queue.poll();
+
+        // Process of keeping track of the prev node, pointing it to the next node until we get to the farthest right node
+        if (prev != null) prev.next = curr;
+        prev = curr;
+
+        // We don't need to do one for the right bec. it's a perfect binary tree
+        if (curr.left != null) {
+          queue.add(curr.left);
+          queue.add(curr.right);
+        }
+      }
+    }
+    return root;
+  }
+  ```
+
+- Big-O:
+  - Time Complexity: O(n)
+  - Space Complexity: O(n)
+
+---
