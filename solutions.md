@@ -2746,3 +2746,52 @@ Populate each **next pointer to point to its next right node**. If there is no n
   - Space Complexity: O(n)
 
 ---
+
+Given the root of a binary tree, check whether it is a **mirror of itself** (i.e., symmetric around its center).
+
+#### Example:
+
+- Input: root = [1,2,2,3,4,4,3]
+- Output: true
+
+#### Solution:
+
+- Breakdown:
+  <img src="https://assets.leetcode.com/uploads/2021/02/19/symtree1.jpg">
+
+  - Apply BFS. Instead of popping one node from the Queue we'll pop two nodes, one from the left and the other from the right. Then we'll check the nodes values from both sides, if the leftSide.left is == to the rightSide.right, and leftSide.right is == to rightSide.left then the tree is symmetric.
+
+- Code:
+
+  ```java
+  public boolean isSymmetric(TreeNode root) {
+    if (root == null) return true;
+    Queue<TreeNode> queue = new LinkedList<>();
+    queue.add(root.left);
+    queue.add(root.right);
+
+    while (!queue.isEmpty()) {
+      TreeNode leftSide = queue.poll();
+      TreeNode rightSide = queue.poll();
+
+      if (leftSide == null && rightSide == null) continue;
+
+      if (leftSide == null || rightSide == null || leftSide.val != rightSide.val) {
+        return false;
+      }
+
+      // Here is where we check if the nodes are symmetric after adding them to the Queue as explained above
+      queue.add(leftSide.left);
+      queue.add(rightSide.right);
+      queue.add(leftSide.right);
+      queue.add(rightSide.left);
+    }
+    return true;
+  }
+  ```
+
+- Big-O:
+  - Time Complexity: O(n)
+  - Space Complexity: O(n)
+
+---
